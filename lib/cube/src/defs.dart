@@ -1,59 +1,59 @@
-import 'enums.dart' show Facelet, Color;
+import 'enums.dart' show CubeFacelet, CubeColor;
 
 /// Map the corner positions to facelet positions.
 const cornerFacelet = [
-  [Facelet.U9, Facelet.R1, Facelet.F3],
-  [Facelet.U7, Facelet.F1, Facelet.L3],
-  [Facelet.U1, Facelet.L1, Facelet.B3],
-  [Facelet.U3, Facelet.B1, Facelet.R3],
-  [Facelet.D3, Facelet.F9, Facelet.R7],
-  [Facelet.D1, Facelet.L9, Facelet.F7],
-  [Facelet.D7, Facelet.B9, Facelet.L7],
-  [Facelet.D9, Facelet.R9, Facelet.B7]
+  [CubeFacelet.U9, CubeFacelet.R1, CubeFacelet.F3],
+  [CubeFacelet.U7, CubeFacelet.F1, CubeFacelet.L3],
+  [CubeFacelet.U1, CubeFacelet.L1, CubeFacelet.B3],
+  [CubeFacelet.U3, CubeFacelet.B1, CubeFacelet.R3],
+  [CubeFacelet.D3, CubeFacelet.F9, CubeFacelet.R7],
+  [CubeFacelet.D1, CubeFacelet.L9, CubeFacelet.F7],
+  [CubeFacelet.D7, CubeFacelet.B9, CubeFacelet.L7],
+  [CubeFacelet.D9, CubeFacelet.R9, CubeFacelet.B7]
 ];
 
 /// Map the edge positions to facelet positions.
 const edgeFacelet = [
-  [Facelet.U6, Facelet.R2],
-  [Facelet.U8, Facelet.F2],
-  [Facelet.U4, Facelet.L2],
-  [Facelet.U2, Facelet.B2],
-  [Facelet.D6, Facelet.R8],
-  [Facelet.D2, Facelet.F8],
-  [Facelet.D4, Facelet.L8],
-  [Facelet.D8, Facelet.B8],
-  [Facelet.F6, Facelet.R4],
-  [Facelet.F4, Facelet.L6],
-  [Facelet.B6, Facelet.L4],
-  [Facelet.B4, Facelet.R6]
+  [CubeFacelet.U6, CubeFacelet.R2],
+  [CubeFacelet.U8, CubeFacelet.F2],
+  [CubeFacelet.U4, CubeFacelet.L2],
+  [CubeFacelet.U2, CubeFacelet.B2],
+  [CubeFacelet.D6, CubeFacelet.R8],
+  [CubeFacelet.D2, CubeFacelet.F8],
+  [CubeFacelet.D4, CubeFacelet.L8],
+  [CubeFacelet.D8, CubeFacelet.B8],
+  [CubeFacelet.F6, CubeFacelet.R4],
+  [CubeFacelet.F4, CubeFacelet.L6],
+  [CubeFacelet.B6, CubeFacelet.L4],
+  [CubeFacelet.B4, CubeFacelet.R6]
 ];
 
 /// Map the corner positions to facelet colors.
 const cornerColor = [
-  [Color.U, Color.R, Color.F],
-  [Color.U, Color.F, Color.L],
-  [Color.U, Color.L, Color.B],
-  [Color.U, Color.B, Color.R],
-  [Color.D, Color.F, Color.R],
-  [Color.D, Color.L, Color.F],
-  [Color.D, Color.B, Color.L],
-  [Color.D, Color.R, Color.B]
+  [CubeColor.U, CubeColor.R, CubeColor.F],
+  [CubeColor.U, CubeColor.F, CubeColor.L],
+  [CubeColor.U, CubeColor.L, CubeColor.B],
+  [CubeColor.U, CubeColor.B, CubeColor.R],
+  [CubeColor.D, CubeColor.F, CubeColor.R],
+  [CubeColor.D, CubeColor.L, CubeColor.F],
+  [CubeColor.D, CubeColor.B, CubeColor.L],
+  [CubeColor.D, CubeColor.R, CubeColor.B]
 ];
 
 /// Map the edge positions to facelet colors.
 const edgeColor = [
-  [Color.U, Color.R],
-  [Color.U, Color.F],
-  [Color.U, Color.L],
-  [Color.U, Color.B],
-  [Color.D, Color.R],
-  [Color.D, Color.F],
-  [Color.D, Color.L],
-  [Color.D, Color.B],
-  [Color.F, Color.R],
-  [Color.F, Color.L],
-  [Color.B, Color.L],
-  [Color.B, Color.R]
+  [CubeColor.U, CubeColor.R],
+  [CubeColor.U, CubeColor.F],
+  [CubeColor.U, CubeColor.L],
+  [CubeColor.U, CubeColor.B],
+  [CubeColor.D, CubeColor.R],
+  [CubeColor.D, CubeColor.F],
+  [CubeColor.D, CubeColor.L],
+  [CubeColor.D, CubeColor.B],
+  [CubeColor.F, CubeColor.R],
+  [CubeColor.F, CubeColor.L],
+  [CubeColor.B, CubeColor.L],
+  [CubeColor.B, CubeColor.R]
 ];
 
 const N_PERM_4 = 24;

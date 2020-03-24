@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:rouxzen/cube.dart';
 import 'package:vector_math/vector_math.dart' as Math;
 
+import 'cube/cube.dart';
+import 'cube_command.dart';
 import 'utils.dart';
+
+const AllSides = [
+  CubeColor.U,
+  CubeColor.L,
+  CubeColor.F,
+  CubeColor.R,
+  CubeColor.B,
+  CubeColor.D
+];
 
 class CubeRotation {
   double frontAngle = 0;
@@ -106,11 +116,15 @@ class CubeModel {
   List<bool> standingStickers;
   List<bool> backStickers;
 
+  double axisX = 0;
+  double axisY = 0;
+  double axisZ = 0;
+
   void reset() {
     rotation.reset();
   }
 
-  void applyMove(CubeMove move, double progress) {
+  void applyMove(CubeCommand move, double progress) {
     rotation.reset();
     if (move.reset) return;
 
@@ -122,22 +136,22 @@ class CubeModel {
     // y - Rotate on U
     // z - Rotate on F
     if (move.rotate) {
-      if (move.face == CubeFace.front || move.face == CubeFace.back) {
-        if (move.face == CubeFace.back) angle *= -1;
+      if (move.face == CubeColor.F || move.face == CubeColor.B) {
+        if (move.face == CubeColor.B) angle *= -1;
         rotation.frontAngle = angle;
         rotation.standingAngle = angle;
         rotation.backAngle = -angle;
       }
 
-      if (move.face == CubeFace.left || move.face == CubeFace.right) {
-        if (move.face == CubeFace.left) angle *= -1;
+      if (move.face == CubeColor.L || move.face == CubeColor.R) {
+        if (move.face == CubeColor.L) angle *= -1;
         rotation.leftAngle = -angle;
         rotation.middleAngle = -angle;
         rotation.rightAngle = angle;
       }
 
-      if (move.face == CubeFace.up || move.face == CubeFace.down) {
-        if (move.face == CubeFace.down) angle *= -1;
+      if (move.face == CubeColor.U || move.face == CubeColor.D) {
+        if (move.face == CubeColor.D) angle *= -1;
         rotation.downAngle = -angle;
         rotation.equatorialAngle = -angle;
         rotation.upAngle = angle;
@@ -150,18 +164,18 @@ class CubeModel {
     // E - Equatorial same direction as D
     // S - Standing same direction as F
     if (move.slice) {
-      if (move.face == CubeFace.front || move.face == CubeFace.back) {
-        if (move.face == CubeFace.back) angle *= -1;
+      if (move.face == CubeColor.F || move.face == CubeColor.B) {
+        if (move.face == CubeColor.B) angle *= -1;
         rotation.standingAngle = angle;
       }
 
-      if (move.face == CubeFace.left || move.face == CubeFace.right) {
-        if (move.face == CubeFace.right) angle *= -1;
+      if (move.face == CubeColor.L || move.face == CubeColor.R) {
+        if (move.face == CubeColor.R) angle *= -1;
         rotation.middleAngle = angle;
       }
 
-      if (move.face == CubeFace.up || move.face == CubeFace.down) {
-        if (move.face == CubeFace.up) angle *= -1;
+      if (move.face == CubeColor.U || move.face == CubeColor.D) {
+        if (move.face == CubeColor.U) angle *= -1;
         rotation.equatorialAngle = angle;
       }
 
@@ -169,36 +183,36 @@ class CubeModel {
     }
 
     switch (move.face) {
-      case CubeFace.front:
+      case CubeColor.F:
         rotation.frontAngle = angle;
         if (move.wide) rotation.standingAngle = angle;
         break;
-      case CubeFace.back:
+      case CubeColor.B:
         rotation.backAngle = angle;
         if (move.wide) rotation.standingAngle = -angle;
         break;
-      case CubeFace.left:
+      case CubeColor.L:
         rotation.leftAngle = angle;
         if (move.wide) rotation.middleAngle = angle;
         break;
-      case CubeFace.right:
+      case CubeColor.R:
         rotation.rightAngle = angle;
         if (move.wide) rotation.middleAngle = -angle;
         break;
-      case CubeFace.up:
+      case CubeColor.U:
         rotation.upAngle = angle;
         if (move.wide) rotation.equatorialAngle = -angle;
         break;
-      case CubeFace.down:
+      case CubeColor.D:
         rotation.downAngle = angle;
         if (move.wide) rotation.equatorialAngle = angle;
         break;
-      case CubeFace.none:
+      case CubeColor.none:
         break;
     }
   }
 
-  void _addCubieFace(double x, double y, double z, CubeFace face) {
+  void _addCubieFace(double x, double y, double z, CubeColor face) {
     var cmf = CubeModelFace(verts.length)
       ..isLeft = x < 0
       ..isMiddle = x == 0
@@ -217,37 +231,37 @@ class CubeModel {
     Math.Vector3 center;
 
     switch (face) {
-      case CubeFace.front:
+      case CubeColor.F:
         center = Math.Vector3(x, y - .5, z);
         axisX = Math.Vector3(.5, 0, 0);
         axisY = Math.Vector3(0, 0, .5);
         break;
-      case CubeFace.back:
+      case CubeColor.B:
         center = Math.Vector3(x, y + .5, z);
         axisX = Math.Vector3(-.5, 0, 0);
         axisY = Math.Vector3(0, 0, .5);
         break;
-      case CubeFace.left:
+      case CubeColor.L:
         center = Math.Vector3(x - .5, y, z);
         axisX = Math.Vector3(0, -.5, 0);
         axisY = Math.Vector3(0, 0, .5);
         break;
-      case CubeFace.right:
+      case CubeColor.R:
         center = Math.Vector3(x + .5, y, z);
         axisX = Math.Vector3(0, .5, 0);
         axisY = Math.Vector3(0, 0, .5);
         break;
-      case CubeFace.up:
+      case CubeColor.U:
         center = Math.Vector3(x, y, z + .5);
         axisX = Math.Vector3(.5, 0, 0);
         axisY = Math.Vector3(0, .5, 0);
         break;
-      case CubeFace.down:
+      case CubeColor.D:
         center = Math.Vector3(x, y, z - .5);
         axisX = Math.Vector3(.5, 0, 0);
         axisY = Math.Vector3(0, -.5, 0);
         break;
-      case CubeFace.none:
+      case CubeColor.none:
         break;
     }
 
@@ -282,43 +296,43 @@ class CubeModel {
   //          48 49 50
   //          51 52 53
 
-  void _addSticker(double x, double y, CubeFace face, int index) {
+  void _addSticker(double x, double y, CubeColor face, int index) {
     Math.Vector3 axisX;
     Math.Vector3 axisY;
     Math.Vector3 center;
 
     switch (face) {
-      case CubeFace.front:
+      case CubeColor.F:
         center = Math.Vector3(x, -1.5, y);
         axisX = Math.Vector3(.5, 0, 0);
         axisY = Math.Vector3(0, 0, .5);
         break;
-      case CubeFace.back:
+      case CubeColor.B:
         center = Math.Vector3(-x, 1.5, y);
         axisX = Math.Vector3(-.5, 0, 0);
         axisY = Math.Vector3(0, 0, .5);
         break;
-      case CubeFace.left:
+      case CubeColor.L:
         center = Math.Vector3(-1.5, -x, y);
         axisX = Math.Vector3(0, -.5, 0);
         axisY = Math.Vector3(0, 0, .5);
         break;
-      case CubeFace.right:
+      case CubeColor.R:
         center = Math.Vector3(1.5, x, y);
         axisX = Math.Vector3(0, .5, 0);
         axisY = Math.Vector3(0, 0, .5);
         break;
-      case CubeFace.up:
+      case CubeColor.U:
         center = Math.Vector3(x, y, 1.5);
         axisX = Math.Vector3(.5, 0, 0);
         axisY = Math.Vector3(0, .5, 0);
         break;
-      case CubeFace.down:
+      case CubeColor.D:
         center = Math.Vector3(x, -y, -1.5);
         axisX = Math.Vector3(.5, 0, 0);
         axisY = Math.Vector3(0, -.5, 0);
         break;
-      case CubeFace.none:
+      case CubeColor.none:
         break;
     }
     axisX *= .95;

@@ -1,22 +1,27 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:rouxzen/cube.dart';
+import 'package:rouxzen/cube_state.dart';
 
 void main() {
   group('Cube Face Turns', () {
     test('Cube should start solved', () {
-      final cube = Cube();
+      final cube = CubeState();
       print(cube.debugCube);
       expect(cube.isSolved, true);
     });
+    test('Middle', () {
+      final cube = CubeState();
+      cube.apply("M");
+      print(cube.debugCube);
+    });
 
     test('Front', () {
-      final cube = Cube();
+      final cube = CubeState();
       cube.apply("F");
-      //print(cube.debugCube);
+      print(cube.debugCube);
       expect(cube.isSolved, false);
       cube.apply("F2");
       var f3 = cube.debugCube;
-      //print(f3);
+      print(f3);
       expect(cube.isSolved, false);
       cube.apply("F");
       expect(cube.isSolved, true);
@@ -27,14 +32,14 @@ void main() {
       expect(cube.isSolved, true);
 
       cube.apply("f'");
-      //print(cube.debugCube);
+      print(cube.debugCube);
       expect(cube.isSolved, false);
       cube.apply("f");
       expect(cube.isSolved, true);
     });
 
     test('Back', () {
-      final cube = Cube();
+      final cube = CubeState();
       cube.apply("B");
       //print(cube.debugCube);
       expect(cube.isSolved, false);
@@ -58,7 +63,7 @@ void main() {
     });
 
     test('Left', () {
-      final cube = Cube();
+      final cube = CubeState();
       cube.apply("L");
       //print(cube.debugCube);
       expect(cube.isSolved, false);
@@ -81,7 +86,7 @@ void main() {
       expect(cube.isSolved, true);
     });
     test('Right', () {
-      final cube = Cube();
+      final cube = CubeState();
       cube.apply("R");
       //print(cube.debugCube);
       expect(cube.isSolved, false);
@@ -105,7 +110,7 @@ void main() {
     });
 
     test('Up', () {
-      final cube = Cube();
+      final cube = CubeState();
       cube.apply("U");
       //print(cube.debugCube);
       expect(cube.isSolved, false);
@@ -129,7 +134,7 @@ void main() {
     });
 
     test('Down', () {
-      final cube = Cube();
+      final cube = CubeState();
       cube.apply("D");
       //print(cube.debugCube);
       expect(cube.isSolved, false);

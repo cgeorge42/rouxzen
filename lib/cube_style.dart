@@ -1,128 +1,96 @@
 import 'package:flutter/material.dart';
-
-import 'cube.dart';
+import 'cube/cube.dart';
 
 class CubeStyle {
-  final CubeColor front;
-  final CubeColor back;
-  final CubeColor up;
-  final CubeColor down;
-  final CubeColor left;
-  final CubeColor right;
+  final Color front;
+  final Color back;
+  final Color up;
+  final Color down;
+  final Color left;
+  final Color right;
 
   CubeStyle._(this.front, this.back, this.left, this.right, this.up, this.down);
 
-  Color asColor(CubeColor color) {
-    switch (color) {
-      case CubeColor.red:
-        return Colors.red;
-        break;
-      case CubeColor.orange:
-        return Colors.orange;
-        break;
-      case CubeColor.blue:
-        return Colors.blue;
-        break;
-      case CubeColor.green:
-        return Colors.green;
-        break;
-      case CubeColor.yellow:
-        return Colors.yellow;
-        break;
-      case CubeColor.white:
-        return Colors.white;
-        break;
-    }
-    return Colors.black;
-  }
-
-  Color colorOf(CubeFace side) {
+  Color colorOf(CubeColor side) {
     switch (side) {
-      case CubeFace.front:
-        return asColor(front);
+      case CubeColor.F:
+        return front;
         break;
-      case CubeFace.back:
-        return asColor(back);
+      case CubeColor.B:
+        return back;
         break;
-      case CubeFace.left:
-        return asColor(left);
+      case CubeColor.L:
+        return left;
         break;
-      case CubeFace.right:
-        return asColor(right);
+      case CubeColor.R:
+        return right;
         break;
-      case CubeFace.up:
-        return asColor(up);
+      case CubeColor.U:
+        return up;
         break;
-      case CubeFace.down:
-        return asColor(down);
+      case CubeColor.D:
+        return down;
         break;
-      case CubeFace.none:
+      case CubeColor.none:
         return Colors.grey;
         break;
     }
     return Colors.black;
   }
 
-  static CubeColor opposite(CubeColor face) {
-    switch (face) {
-      case CubeColor.red:
-        return CubeColor.orange;
-      case CubeColor.orange:
-        return CubeColor.red;
-      case CubeColor.blue:
-        return CubeColor.green;
-      case CubeColor.green:
-        return CubeColor.blue;
-      case CubeColor.yellow:
-        return CubeColor.white;
-      case CubeColor.white:
-        return CubeColor.yellow;
-    }
-    return face;
+  static Color opposite(Color face) {
+    if (face == Colors.red) return Colors.orange;
+    if (face == Colors.orange) return Colors.red;
+    if (face == Colors.blue) return Colors.green;
+    if (face == Colors.green) return Colors.blue;
+    if (face == Colors.white) return Colors.yellow;
+    if (face == Colors.yellow) return Colors.white;
+
+    return Colors.black;
   }
 
   factory CubeStyle() {
-    return CubeStyle._(CubeColor.red, CubeColor.orange, CubeColor.blue,
-        CubeColor.green, CubeColor.yellow, CubeColor.white);
+    return CubeStyle._(Colors.red, Colors.orange, Colors.blue, Colors.green,
+        Colors.yellow, Colors.white);
   }
 
-  factory CubeStyle.frontUp(CubeColor front, CubeColor up) {
-    CubeColor left;
+  factory CubeStyle.frontUp(Color front, Color up) {
+    Color left;
 
-    if (front == CubeColor.red || front == CubeColor.orange) {
-      if (up == CubeColor.red) up = CubeColor.yellow;
-      if (up == CubeColor.orange) up = CubeColor.yellow;
+    if (front == Colors.red || front == Colors.orange) {
+      if (up == Colors.red) up = Colors.yellow;
+      if (up == Colors.orange) up = Colors.yellow;
 
-      if (up == CubeColor.yellow) left = CubeColor.blue;
-      if (up == CubeColor.blue) left = CubeColor.white;
-      if (up == CubeColor.white) left = CubeColor.green;
-      if (up == CubeColor.green) left = CubeColor.yellow;
+      if (up == Colors.yellow) left = Colors.blue;
+      if (up == Colors.blue) left = Colors.white;
+      if (up == Colors.white) left = Colors.green;
+      if (up == Colors.green) left = Colors.yellow;
 
-      if (front == CubeColor.orange) left = opposite(left);
+      if (front == Colors.orange) left = opposite(left);
     }
 
-    if (front == CubeColor.blue || front == CubeColor.green) {
-      if (up == CubeColor.blue) up = CubeColor.yellow;
-      if (up == CubeColor.green) up = CubeColor.yellow;
+    if (front == Colors.blue || front == Colors.green) {
+      if (up == Colors.blue) up = Colors.yellow;
+      if (up == Colors.green) up = Colors.yellow;
 
-      if (up == CubeColor.yellow) left = CubeColor.orange;
-      if (up == CubeColor.orange) left = CubeColor.white;
-      if (up == CubeColor.white) left = CubeColor.red;
-      if (up == CubeColor.red) left = CubeColor.yellow;
+      if (up == Colors.yellow) left = Colors.orange;
+      if (up == Colors.orange) left = Colors.white;
+      if (up == Colors.white) left = Colors.red;
+      if (up == Colors.red) left = Colors.yellow;
 
-      if (front == CubeColor.green) left = opposite(left);
+      if (front == Colors.green) left = opposite(left);
     }
 
-    if (front == CubeColor.yellow || front == CubeColor.white) {
-      if (up == CubeColor.yellow) up = CubeColor.red;
-      if (up == CubeColor.white) up = CubeColor.red;
+    if (front == Colors.yellow || front == Colors.white) {
+      if (up == Colors.yellow) up = Colors.red;
+      if (up == Colors.white) up = Colors.red;
 
-      if (up == CubeColor.orange) left = CubeColor.blue;
-      if (up == CubeColor.blue) left = CubeColor.red;
-      if (up == CubeColor.red) left = CubeColor.green;
-      if (up == CubeColor.green) left = CubeColor.orange;
+      if (up == Colors.orange) left = Colors.blue;
+      if (up == Colors.blue) left = Colors.red;
+      if (up == Colors.red) left = Colors.green;
+      if (up == Colors.green) left = Colors.orange;
 
-      if (front == CubeColor.white) left = opposite(left);
+      if (front == Colors.white) left = opposite(left);
     }
 
     return CubeStyle._(

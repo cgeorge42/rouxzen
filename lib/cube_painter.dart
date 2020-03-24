@@ -73,17 +73,26 @@ class CubePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     //canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), edgePen);
 
-    // Transform
+    // Cube Axis Transform
+    var ma = Math.Matrix4.identity();
+    ma.rotateZ(Utils.degreeToRadian(-model.axisZ));
+    ma.rotateX(Utils.degreeToRadian(-model.axisX));
+    ma.rotateY(Utils.degreeToRadian(model.axisY));
 
-    var m = Math.Matrix4.translationValues(_viewPortX, _viewPortY, 1);
-    m.scale(zoom, -zoom);
-    m.rotateX(Utils.degreeToRadian(angleX));
-    m.rotateY(Utils.degreeToRadian(angleY));
-    m.rotateZ(Utils.degreeToRadian(angleZ));
+    // Camera Transform
+
+    var mc = Math.Matrix4.translationValues(_viewPortX, _viewPortY, 1);
+    mc.scale(zoom, -zoom);
+    mc.rotateX(Utils.degreeToRadian(angleX));
+    mc.rotateY(Utils.degreeToRadian(angleY));
+    mc.rotateZ(Utils.degreeToRadian(angleZ));
 
     verts = List<Math.Vector3>();
     for (var v in model.verts) {
-      verts.add(m.transform3(Math.Vector3.copy(v)));
+      var next = Math.Vector3.copy(v);
+      ma.transform3(next);
+      mc.transform3(next);
+      verts.add(next);
     }
 
     // Sort

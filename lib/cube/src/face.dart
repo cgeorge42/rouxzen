@@ -1,4 +1,4 @@
-import 'enums.dart' show Color, colorNames;
+import 'enums.dart' show CubeColor, colorNames;
 import 'defs.dart' show cornerFacelet, cornerColor, edgeFacelet, edgeColor;
 import 'cubie.dart' show CubieCube;
 
@@ -10,7 +10,14 @@ class FaceCube {
   bool isValid = true;
 
   FaceCube() {
-    for (var color in [Color.U, Color.R, Color.F, Color.D, Color.L, Color.B]) {
+    for (var color in [
+      CubeColor.U,
+      CubeColor.R,
+      CubeColor.F,
+      CubeColor.D,
+      CubeColor.L,
+      CubeColor.B
+    ]) {
       for (var i = 0; i < 9; i++) {
         f.add(color.index);
       }
@@ -40,27 +47,27 @@ class FaceCube {
       var c = i < source.length ? source[i] : "X";
       switch (c) {
         case "U":
-          result.f[i] = Color.U.index;
+          result.f[i] = CubeColor.U.index;
           counts["U"] += 1;
           break;
         case "R":
-          result.f[i] = Color.R.index;
+          result.f[i] = CubeColor.R.index;
           counts["R"] += 1;
           break;
         case "F":
-          result.f[i] = Color.F.index;
+          result.f[i] = CubeColor.F.index;
           counts["F"] += 1;
           break;
         case "D":
-          result.f[i] = Color.D.index;
+          result.f[i] = CubeColor.D.index;
           counts["D"] += 1;
           break;
         case "L":
-          result.f[i] = Color.L.index;
+          result.f[i] = CubeColor.L.index;
           counts["L"] += 1;
           break;
         case "B":
-          result.f[i] = Color.B.index;
+          result.f[i] = CubeColor.B.index;
           counts["B"] += 1;
           break;
         default:
@@ -78,18 +85,18 @@ class FaceCube {
   String to2dString() {
     var s = toString();
     var sb = StringBuffer();
-    sb.writeln("   ${s.substring(0, 3)}");
-    sb.writeln("   ${s.substring(3, 6)}");
-    sb.writeln("   ${s.substring(6, 9)}");
+    sb.writeln("    ${s.substring(0, 3)}");
+    sb.writeln("    ${s.substring(3, 6)}");
+    sb.writeln("    ${s.substring(6, 9)}");
     sb.writeln(
-        "${s.substring(36, 39)}${s.substring(18, 21)}${s.substring(9, 12)}${s.substring(45, 48)}");
+        "${s.substring(36, 39)} ${s.substring(18, 21)} ${s.substring(9, 12)} ${s.substring(45, 48)}");
     sb.writeln(
-        "${s.substring(39, 42)}${s.substring(21, 24)}${s.substring(12, 15)}${s.substring(48, 51)}");
+        "${s.substring(39, 42)} ${s.substring(21, 24)} ${s.substring(12, 15)} ${s.substring(48, 51)}");
     sb.writeln(
-        "${s.substring(42, 45)}${s.substring(24, 27)}${s.substring(15, 18)}${s.substring(51, 54)}");
-    sb.writeln("   ${s.substring(27, 30)}");
-    sb.writeln("   ${s.substring(30, 33)}");
-    sb.writeln("   ${s.substring(33, 36)}");
+        "${s.substring(42, 45)} ${s.substring(24, 27)} ${s.substring(15, 18)} ${s.substring(51, 54)}");
+    sb.writeln("    ${s.substring(27, 30)}");
+    sb.writeln("    ${s.substring(30, 33)}");
+    sb.writeln("    ${s.substring(33, 36)}");
 
     return sb.toString();
   }
@@ -103,6 +110,7 @@ class FaceCube {
     return sb.toString();
   }
 
+  /// Return a cubie representation of the facelet cube.
   CubieCube toCubieCube() {
     var cc = CubieCube();
 
@@ -117,7 +125,7 @@ class FaceCube {
       var k = 0;
       for (k in [0, 1, 2]) {
         var c = f[fac[k].index];
-        if (c == Color.U.index || c == Color.D.index) break;
+        if (c == CubeColor.U.index || c == CubeColor.D.index) break;
       }
 
       var c1 = f[fac[(k + 1) % 3].index];

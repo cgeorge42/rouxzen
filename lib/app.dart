@@ -1,7 +1,7 @@
 import 'package:mobx/mobx.dart';
 import 'package:rouxzen/cube_style.dart';
 
-import 'cube.dart';
+import 'cube_state.dart';
 part 'app.g.dart';
 
 class RouxApp = _RouxApp with _$RouxApp;
@@ -15,5 +15,5 @@ abstract class _RouxApp with Store {
   @observable
   CubeStyle cubeStyle = CubeStyle();
 
-  final Cube cube = Cube();
+  final CubeState cube = CubeState();
 }

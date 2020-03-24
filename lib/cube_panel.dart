@@ -6,14 +6,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mobx/mobx.dart';
 import 'package:rouxzen/cube_style.dart';
 
-import 'cube.dart';
+import 'cube_command.dart';
+import 'cube_state.dart';
 import 'cube_model.dart';
 import 'cube_painter.dart';
 
 enum CubePanelView { text, flat, cube, face }
 
 class CubePanel extends StatefulWidget {
-  final Cube cube;
+  final CubeState cube;
   final CubeStyle style;
   final CubePanelView view;
   final bool isReadOnly;
@@ -60,24 +61,23 @@ class _CubePanelState extends State<CubePanel>
         setState(() {
           if (widget.cube.moves.isNotEmpty) {
             var move = widget.cube.moves.first;
-            var running = moveController.value < 1;
-
-            if (move.reset && running) {
-              moveController.stop();
-              running = false;
+            if (move.reset) {
+              angleX = -65.0;
+              angleY = 0.0;
+              angleZ = -45.0;
             }
-
-            if (running) {
-              model.applyMove(move, moveAnimation.value);
-              model.update();
-            } else {
-              model.reset();
-              model.update();
-              widget.cube.step(widget.cube.moves.first);
-              widget.cube.pop();
-            }
+            model.applyMove(move.remap(widget.cube.axis), moveAnimation.value);
+            model.update();
           }
         });
+      })
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          model.reset();
+          model.update();
+          widget.cube.step(widget.cube.moves.first);
+          widget.cube.pop();
+        }
       });
 
     moveReactionDisposer = reaction((_) => widget.cube.moves.length, (_) {
@@ -88,6 +88,7 @@ class _CubePanelState extends State<CubePanel>
         var doubled = widget.cube.moves.first.doubled;
         moveController.duration =
             Duration(milliseconds: doubled ? speed * 2 : speed);
+
         moveController.reset();
         moveController.forward();
       }
@@ -134,7 +135,7 @@ class _CubePanelState extends State<CubePanel>
         if (evt.isShiftPressed) key += "'";
       }
 
-      widget.cube.push(CubeMove.parse(key));
+      widget.cube.push(CubeCommand.parse(key));
     }
   }
 
@@ -162,16 +163,25 @@ class _CubePanelState extends State<CubePanel>
           }
         }
 
-        return GestureDetector(
-          child: CustomPaint(
-            painter: CubePainter(widget.size, model, angleX, angleY, angleZ,
-                (widget.size.shortestSide / 5.25) * zoom),
-            size: widget.size,
-          ),
-          onHorizontalDragUpdate: (DragUpdateDetails update) =>
-              handleDragX(update),
-          onVerticalDragUpdate: (DragUpdateDetails update) =>
-              handleDragY(update),
+        var rotation = widget.cube.rotation;
+        model.axisX = rotation[1].toDouble();
+        model.axisY = rotation[2].toDouble();
+        model.axisZ = rotation[0].toDouble();
+
+        return Column(
+          children: <Widget>[
+            GestureDetector(
+              child: CustomPaint(
+                painter: CubePainter(widget.size, model, angleX, angleY, angleZ,
+                    (widget.size.shortestSide / 5.25) * zoom),
+                size: widget.size,
+              ),
+              onHorizontalDragUpdate: (DragUpdateDetails update) =>
+                  handleDragX(update),
+              onVerticalDragUpdate: (DragUpdateDetails update) =>
+                  handleDragY(update),
+            ),
+          ],
         );
         break;
 

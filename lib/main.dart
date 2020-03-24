@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:rouxzen/cube_panel.dart';
 
 import 'app.dart';
-import 'cube.dart';
+import 'cube_command.dart';
 
 void main() {
   runApp(MyApp());
@@ -58,13 +58,13 @@ class MyHomePage extends StatelessWidget {
         children: <Widget>[
           Padding(padding: EdgeInsets.only(left: 30)),
           FloatingActionButton(
-            onPressed: () => app.cube.reset(),
+            onPressed: () => app.cube.push(CubeCommand.reset()),
             tooltip: 'Reset',
             child: Icon(Icons.cached),
           ),
           Padding(padding: EdgeInsets.only(left: 20)),
           FloatingActionButton(
-            onPressed: () => app.cube.pushAll(CubeMove.random(4)),
+            onPressed: () => app.cube.pushAll(CubeCommand.random(4)),
             tooltip: 'Scramble',
             child: Icon(Icons.shuffle),
           )
