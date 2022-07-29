@@ -1,3 +1,7 @@
+import 'dart:math';
+
+import 'package:rouxzen/cube/src/utils.dart';
+
 import 'face.dart';
 import 'enums.dart';
 import 'defs.dart';
@@ -22,9 +26,9 @@ class CubieCube {
   List<int> eo;
 
   CubieCube() {
-    cp = [0, 1, 2, 3, 4, 5, 6, 7];
+    cp = [...allCorners];
     co = [0, 0, 0, 0, 0, 0, 0, 0];
-    ep = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+    ep = [...allEdges];
     eo = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   }
 
@@ -37,6 +41,10 @@ class CubieCube {
     co = [...other.co];
     ep = [...other.ep];
     eo = [...other.eo];
+  }
+
+  CubieCube.random() {
+    randomize();
   }
 
   factory CubieCube.init(
@@ -285,14 +293,14 @@ class CubieCube {
   }
 
   String verify() {
-    var edges = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var edgeCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
     for (int i = 0; i < 12; i++) {
-      edges[ep[i]] += 1;
+      edgeCount[ep[i]] += 1;
     }
 
     for (int i = 0; i < 12; i++) {
-      if (edges[i] != 1) return "Error: Some edges are undefined.";
+      if (edgeCount[i] != 1) return "Error: Some edges are undefined.";
     }
 
     int s = 0;
@@ -302,13 +310,13 @@ class CubieCube {
 
     if (s % 2 != 0) return "Error: Total edge flip is wrong.";
 
-    var corners = [0, 0, 0, 0, 0, 0, 0, 0];
+    var cornerCount = [0, 0, 0, 0, 0, 0, 0, 0];
     for (int i = 0; i < 8; i++) {
-      corners[cp[i]] += 1;
+      cornerCount[cp[i]] += 1;
     }
 
     for (int i = 0; i < 8; i++) {
-      if (corners[i] != 1) return "Error: Some corners are undefined.";
+      if (cornerCount[i] != 1) return "Error: Some corners are undefined.";
     }
 
     s = 0;
@@ -323,6 +331,360 @@ class CubieCube {
     }
 
     return CUBE_OK;
+  }
+
+  /// Generate a random cube.
+  ///
+  /// The probability is the same for all possible states.
+  void randomize() {
+    var rnd = Random();
+    edges = rnd.nextInt(479001600); // 12!
+
+    var p = edgeParity;
+    while (true) {
+      corners = rnd.nextInt(40320); // 8!
+      if (p == cornerParity) break;
+    }
+
+    flip = rnd.nextInt(2048); // 2^11
+    twist = rnd.nextInt(2187); // 3^7
+  }
+
+  /// Set the permutation of the 12 edges.
+  set edges(int idx) {
+    ep = [...allEdges];
+    for (var j in allEdges) {
+      var k = idx % (j + 1);
+      idx = (idx / (j + 1)).floor();
+      while (k > 0) {
+        rotateRight(ep, 0, j);
+        k -= 1;
+      }
+    }
+  }
+
+  /// Get the permutation of the 8 corners.
+  ///
+  /// 0 <= corners < 40320 defined but unused in phase 1, 0 <= corners < 40320 in phase 2,
+  /// corners = 0 for solved cube
+
+  int get corners {
+    var perm = [...cp]; // copy corner permutation to rotate it
+
+    var b = 0;
+    for (var j in range(CubeCorner.DRB.index, CubeCorner.URF.index, -1)) {
+      var k = 0;
+      while (perm[j] != j) {
+        rotateLeft(perm, 0, j);
+        k += 1;
+      }
+      b = (j + 1) * b + k;
+    }
+    return b;
+  }
+
+  /// Set the permuation of the 8 corners.
+  set corners(int idx) {
+    cp = [...allCorners];
+    for (var j in allCorners) {
+      var k = idx % (j + 1);
+      idx = (idx / (j + 1)).floor();
+      while (k > 0) {
+        rotateRight(cp, 0, j);
+        k -= 1;
+      }
+    }
+  }
+
+  /// Get the flip of the 12 edges.
+  ///
+  /// 0 <= flip < 2048 in phase 1, flip = 0 in phase 2.
+  int get flip {
+    int result = 0;
+    for (var i in range(CubeEdge.UR.index, CubeEdge.BR.index)) {
+      result = 2 * result + eo[i];
+    }
+    return result;
+  }
+
+  /// Set the orientation of the 12 edges.
+  set flip(int idx) {
+    var fparity = 0;
+    eo = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    // set the first 11 edges
+    for (var i in range(CubeEdge.BR.index - 1, CubeEdge.UR.index - 1, -1)) {
+      eo[i] = idx % 2;
+      fparity += eo[i];
+      idx = (idx / 2).floor();
+    }
+
+    // orientation of the last edge is determined by the flip of the other 11
+    eo[CubeEdge.BR.index] = ((2 - (fparity % 2)) % 2);
+  }
+
+  /// Get the twist of the 8 corners.
+  ///
+  /// 0 <= twist < 2187 in phase 1, twist = 0 in phase 2
+  int get twist {
+    int result = 0;
+    for (var i in range(CubeCorner.URF.index, CubeCorner.DRB.index)) {
+      result = 3 * result + co[i];
+    }
+    return result;
+  }
+
+  /// Set the orientation of the 8 corners
+  set twist(int idx) {
+    var tparity = 0;
+    co = [0, 0, 0, 0, 0, 0, 0, 0];
+    // Set the first 7 edges
+    for (var i
+        in range(CubeCorner.DRB.index - 1, CubeCorner.URF.index - 1, -1)) {
+      co[i] = idx % 3;
+      tparity += co[i];
+      idx = (idx / 3).floor();
+    }
+
+    // orientation of the last corner is determined by the twist of the other 8
+    co[CubeCorner.DRB.index] = ((3 - (tparity % 3)) % 3);
+  }
+
+  /// Get the location of the UD-slice edges FR,FL,BL and BR ignoring their permutation.
+  ///
+  /// 0<= slice < 495 in phase 1, slice = 0 in phase 2.
+  int get slice {
+    int a = 0;
+    int x = 0;
+
+    // Compute the index a < (12 choose 4)
+    for (var j in range(CubeEdge.BR.index, CubeEdge.UR.index - 1, -1)) {
+      if (CubeEdge.FR.index <= ep[j] && ep[j] <= CubeEdge.BR.index) {
+        a += coeffNchooseK(11 - j, x + 1);
+        x += 1;
+      }
+    }
+    return a;
+  }
+
+  set slice(int idx) {
+    var sliceEdge = [...allEdges.skip(8)];
+    var otherEdge = [...allEdges.take(8)];
+    var a = idx; // Location
+
+    for (int e = 0; e < 12; e++) {
+      ep[e] = -1; // Invalidate all edge positions
+
+      var x = 4; // set slice edges
+      for (var j = 0; j < 12; j++) {
+        if (a - coeffNchooseK(11 - j, x) >= 0) {
+          ep[j] = sliceEdge[4 - x];
+          a -= coeffNchooseK(11 - j, x);
+          x -= 1;
+        }
+      }
+
+      x = 0; // set the remaining edges UR..DB
+
+      for (var j = 0; j < 12; j++) {
+        if (ep[j] == -1) {
+          ep[j] = otherEdge[x];
+          x += 1;
+        }
+      }
+    }
+  }
+
+  /// Get the permutation and location of the UD-slice edges FR,FL,BL and BR.
+  ///
+  ///0 <= sliceSorted < 11880 in phase 1, 0 <= sliceSorted < 24 in phase 2, sliceSorted = 0 for solved cube.
+  int get sliceSorted {
+    var a = 0;
+    var x = 0;
+    var edge4 = [0, 0, 0, 0];
+
+    // First compute the index a < (12 choose 4) and the permutation array perm.
+    for (var j in range(CubeEdge.BR.index, CubeEdge.UR.index - 1, -1)) {
+      if (CubeEdge.FR.index <= ep[j] && ep[j] <= CubeEdge.BR.index) {
+        a += coeffNchooseK(11 - j, x + 1);
+        edge4[3 - x] = ep[j];
+        x += 1;
+      }
+    }
+
+    // Then compute the index b < 4! for the permutation in edge4
+    var b = 0;
+    for (var j in range(3, 0, -1)) {
+      var k = 0;
+      while (edge4[j] != j + 8) {
+        rotateLeft(edge4, 0, j);
+        k += 1;
+      }
+      b = (j + 1) * b + k;
+    }
+    return 24 * a + b;
+  }
+
+  set sliceSorted(int idx) {
+    var sliceEdge = [...allEdges.skip(8)];
+    var otherEdge = [...allEdges.take(8)];
+
+    var b = idx % 24; // Permutation
+    var a = (idx / 24).floor(); // Location
+    for (var e in allEdges) {
+      ep[e] = -1;
+    } // Invalidate all edge positions
+
+    var j = 1; // generate permutation from index b
+    while (j < 4) {
+      var k = b % (j + 1);
+      b = (b / (j + 1)).floor();
+      while (k > 0) {
+        rotateRight(sliceEdge, 0, j);
+        k -= 1;
+      }
+      j += 1;
+    }
+
+    var x = 4; // set slice edges
+    for (var j in allEdges) {
+      if (a - coeffNchooseK(11 - j, x) >= 0) {
+        ep[j] = sliceEdge[4 - x];
+        a -= coeffNchooseK(11 - j, x);
+        x -= 1;
+      }
+    }
+
+    x = 0; // set the remaining edges UR..DB
+    for (j in allEdges) {
+      if (ep[j] == -1) {
+        ep[j] = otherEdge[x];
+        x += 1;
+      }
+    }
+  }
+
+  ///Get the permutation and location of edges UR, UF, UL and UB.
+  ///
+  ///0 <= uEdges < 11880 in phase 1, 0 <= uEdges < 1680 in phase 2, uEdges = 1656 for solved cube.
+  int get uEdges => _getEdges(CubeEdge.UR.index, CubeEdge.UB.index, 0);
+
+  set uEdges(int idx) {
+    var sliceEdge = [...allEdges.take(4)];
+    var otherEdge = [...allEdges.skip(4)];
+    _setEdges(idx, sliceEdge, otherEdge);
+  }
+
+  /// Get the permutation and location of the edges DR, DF, DL and DB.
+  ///
+  /// 0 <= dEdges < 11880 in phase 1, 0 <= dEdges < 1680 in phase 2, dEdges = 0 for solved cube.
+  int get dEdges => _getEdges(CubeEdge.DR.index, CubeEdge.DB.index, 4);
+
+  set dEdges(int idx) {
+    var sliceEdge = [...allEdges.sublist(4, 8)];
+    var otherEdge = [...allEdges.skip(8), ...allEdges.take(4)];
+    _setEdges(idx, sliceEdge, otherEdge);
+  }
+
+  int _getEdges(int first, int last, int offset) {
+    var a = 0;
+    var x = 0;
+    var edge4 = [0, 0, 0, 0];
+    var mod = [...ep];
+
+    rotateRight(mod, 0, 11);
+    rotateRight(mod, 0, 11);
+    rotateRight(mod, 0, 11);
+    rotateRight(mod, 0, 11);
+
+    // First compute the index a < (12 choose 4) and the permutation array perm.
+    for (var j in range(CubeEdge.BR.index, CubeEdge.UR.index - 1, -1)) {
+      if (first <= mod[j] && mod[j] <= last) {
+        a += coeffNchooseK(11 - j, x + 1);
+        edge4[3 - x] = mod[j];
+        x += 1;
+      }
+    }
+    // Then compute the index b < 4! for the permutation in edge4
+    var b = 0;
+    for (var j in range(3, 0, -1)) {
+      var k = 0;
+      while (edge4[j] != j + offset) {
+        rotateLeft(edge4, 0, j);
+        k += 1;
+      }
+      b = (j + 1) * b + k;
+    }
+    return 24 * a + b;
+  }
+
+  void _setEdges(int idx, List<int> sliceEdge, List<int> otherEdge) {
+    var b = idx % 24; // Permutation
+    var a = (idx / 24).floor(); // Location
+    for (var e in allEdges) ep[e] = -1; // Invalidate all edge positions
+
+    var j = 1; // generate permutation from index b
+    while (j < 4) {
+      var k = b % (j + 1);
+      b = (b / (j + 1)).floor();
+      while (k > 0) {
+        rotateRight(sliceEdge, 0, j);
+        k -= 1;
+      }
+      j += 1;
+    }
+
+    var x = 4; // set slice edges
+    for (var j in allEdges) {
+      if (a - coeffNchooseK(11 - j, x) >= 0) {
+        ep[j] = sliceEdge[4 - x];
+        a -= coeffNchooseK(11 - j, x);
+        x -= 1;
+      }
+    }
+    x = 0; // set the remaining edges UR..DB
+    for (var j in allEdges) {
+      if (ep[j] == -1) {
+        ep[j] = otherEdge[x];
+        x += 1;
+      }
+    }
+
+    rotateLeft(ep, 0, 11);
+    rotateLeft(ep, 0, 11);
+    rotateLeft(ep, 0, 11);
+    rotateLeft(ep, 0, 11);
+  }
+
+  /// Get the permutation of the 8 U and D edges.
+  ///
+  /// udEdges undefined in phase 1, 0 <= udEdges < 40320 in phase 2, udEdges = 0 for solved cube.
+  int get udEdges {
+    var perm = [...ep.take(8)]; // duplicate first 8 elements of ep
+    var b = 0;
+    for (var j in range(CubeEdge.DB.index, CubeEdge.UR.index, -1)) {
+      var k = 0;
+      while (perm[j] != j) {
+        rotateLeft(perm, 0, j);
+        k += 1;
+      }
+      b = (j + 1) * b + k;
+    }
+    return b;
+  }
+
+  set udEdges(int idx) {
+    // positions of FR FL BL BR edges are not affected
+    for (var i in allEdges.take(8)) ep[i] = i;
+
+    for (var j in allEdges.take(8)) {
+      var k = idx % (j + 1);
+      idx = (idx / (j + 1)).floor();
+      while (k > 0) {
+        rotateRight(ep, 0, j);
+        k -= 1;
+      }
+    }
   }
 }
 

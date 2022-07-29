@@ -274,6 +274,12 @@ class CubeCommand {
     return sb.toString();
   }
 
+  CubeCommand reverse() {
+    var result = CubeCommand.copy(this);
+    result.reversed = !result.reversed;
+    return result;
+  }
+
   CubeCommand remap(CubeAxis axis) {
     var result = CubeCommand.copy(this);
 

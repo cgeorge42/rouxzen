@@ -31,23 +31,6 @@ mixin _$CubeState on _CubeState, Store {
   String get debugCube =>
       (_$debugCubeComputed ??= Computed<String>(() => super.debugCube)).value;
 
-  final _$sequenceAtom = Atom(name: '_CubeState.sequence');
-
-  @override
-  String get sequence {
-    _$sequenceAtom.context.enforceReadPolicy(_$sequenceAtom);
-    _$sequenceAtom.reportObserved();
-    return super.sequence;
-  }
-
-  @override
-  set sequence(String value) {
-    _$sequenceAtom.context.conditionallyRunInAction(() {
-      super.sequence = value;
-      _$sequenceAtom.reportChanged();
-    }, _$sequenceAtom, name: '${_$sequenceAtom.name}_set');
-  }
-
   final _$axisAtom = Atom(name: '_CubeState.axis');
 
   @override
@@ -65,20 +48,78 @@ mixin _$CubeState on _CubeState, Store {
     }, _$axisAtom, name: '${_$axisAtom.name}_set');
   }
 
-  final _$_CubeStateActionController = ActionController(name: '_CubeState');
+  final _$stateAtom = Atom(name: '_CubeState.state');
 
   @override
-  CubeCommand pop() {
-    final _$actionInfo = _$_CubeStateActionController.startAction();
-    try {
-      return super.pop();
-    } finally {
-      _$_CubeStateActionController.endAction(_$actionInfo);
-    }
+  String get state {
+    _$stateAtom.context.enforceReadPolicy(_$stateAtom);
+    _$stateAtom.reportObserved();
+    return super.state;
   }
 
   @override
-  dynamic push(CubeCommand move) {
+  set state(String value) {
+    _$stateAtom.context.conditionallyRunInAction(() {
+      super.state = value;
+      _$stateAtom.reportChanged();
+    }, _$stateAtom, name: '${_$stateAtom.name}_set');
+  }
+
+  final _$resetStateAtom = Atom(name: '_CubeState.resetState');
+
+  @override
+  String get resetState {
+    _$resetStateAtom.context.enforceReadPolicy(_$resetStateAtom);
+    _$resetStateAtom.reportObserved();
+    return super.resetState;
+  }
+
+  @override
+  set resetState(String value) {
+    _$resetStateAtom.context.conditionallyRunInAction(() {
+      super.resetState = value;
+      _$resetStateAtom.reportChanged();
+    }, _$resetStateAtom, name: '${_$resetStateAtom.name}_set');
+  }
+
+  final _$resetAxisAtom = Atom(name: '_CubeState.resetAxis');
+
+  @override
+  CubeAxis get resetAxis {
+    _$resetAxisAtom.context.enforceReadPolicy(_$resetAxisAtom);
+    _$resetAxisAtom.reportObserved();
+    return super.resetAxis;
+  }
+
+  @override
+  set resetAxis(CubeAxis value) {
+    _$resetAxisAtom.context.conditionallyRunInAction(() {
+      super.resetAxis = value;
+      _$resetAxisAtom.reportChanged();
+    }, _$resetAxisAtom, name: '${_$resetAxisAtom.name}_set');
+  }
+
+  final _$currentAtom = Atom(name: '_CubeState.current');
+
+  @override
+  int get current {
+    _$currentAtom.context.enforceReadPolicy(_$currentAtom);
+    _$currentAtom.reportObserved();
+    return super.current;
+  }
+
+  @override
+  set current(int value) {
+    _$currentAtom.context.conditionallyRunInAction(() {
+      super.current = value;
+      _$currentAtom.reportChanged();
+    }, _$currentAtom, name: '${_$currentAtom.name}_set');
+  }
+
+  final _$_CubeStateActionController = ActionController(name: '_CubeState');
+
+  @override
+  void push(CubeCommand move) {
     final _$actionInfo = _$_CubeStateActionController.startAction();
     try {
       return super.push(move);
@@ -88,10 +129,40 @@ mixin _$CubeState on _CubeState, Store {
   }
 
   @override
-  dynamic pushAll(Iterable<CubeCommand> sequence, {bool reversed = false}) {
+  void pushAll(Iterable<CubeCommand> sequence, {bool reversed = false}) {
     final _$actionInfo = _$_CubeStateActionController.startAction();
     try {
       return super.pushAll(sequence, reversed: reversed);
+    } finally {
+      _$_CubeStateActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clear() {
+    final _$actionInfo = _$_CubeStateActionController.startAction();
+    try {
+      return super.clear();
+    } finally {
+      _$_CubeStateActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void rewind({int repeat = 1}) {
+    final _$actionInfo = _$_CubeStateActionController.startAction();
+    try {
+      return super.rewind(repeat: repeat);
+    } finally {
+      _$_CubeStateActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic forward({int repeat = 1}) {
+    final _$actionInfo = _$_CubeStateActionController.startAction();
+    try {
+      return super.forward(repeat: repeat);
     } finally {
       _$_CubeStateActionController.endAction(_$actionInfo);
     }
@@ -108,10 +179,10 @@ mixin _$CubeState on _CubeState, Store {
   }
 
   @override
-  void apply(String pattern, {bool reversed = false}) {
+  void apply(String pattern, {bool rewind = false}) {
     final _$actionInfo = _$_CubeStateActionController.startAction();
     try {
-      return super.apply(pattern, reversed: reversed);
+      return super.apply(pattern, rewind: rewind);
     } finally {
       _$_CubeStateActionController.endAction(_$actionInfo);
     }
@@ -128,9 +199,19 @@ mixin _$CubeState on _CubeState, Store {
   }
 
   @override
+  CubeCommand pop() {
+    final _$actionInfo = _$_CubeStateActionController.startAction();
+    try {
+      return super.pop();
+    } finally {
+      _$_CubeStateActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     final string =
-        'sequence: ${sequence.toString()},axis: ${axis.toString()},isSolved: ${isSolved.toString()},rotation: ${rotation.toString()},stickers: ${stickers.toString()},debugCube: ${debugCube.toString()}';
+        'axis: ${axis.toString()},state: ${state.toString()},resetState: ${resetState.toString()},resetAxis: ${resetAxis.toString()},current: ${current.toString()},isSolved: ${isSolved.toString()},rotation: ${rotation.toString()},stickers: ${stickers.toString()},debugCube: ${debugCube.toString()}';
     return '{$string}';
   }
 }

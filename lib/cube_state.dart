@@ -10,91 +10,69 @@ class CubeState = _CubeState with _$CubeState;
 
 abstract class _CubeState with Store {
   @observable
-  String sequence = FaceCube.solved.toString();
+  CubeAxis axis = CubeAxis.UR;
 
   @observable
-  CubeAxis axis = CubeAxis.UR;
+  String state = FaceCube.solved;
+
+  @observable
+  String resetState = FaceCube.solved;
+
+  @observable
+  CubeAxis resetAxis = CubeAxis.UR;
 
   final ObservableList<CubeCommand> moves = ObservableList();
 
-  @computed
-  bool get isSolved =>
-      sequence == "UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB";
+  @observable
+  int current = -1;
 
   @computed
-  List<int> get rotation {
-    var axisAngles = [
-      // UR
-      [0, 0, 0], // ok
-      // UF
-      [-90, 0, 0], // ok
-      // UL
-      [180, 0, 0], // ok
-      // UB
-      [90, 0, 0], // ok
+  bool get isSolved => state == FaceCube.solved;
 
-      // RU
-      [0, 180, 90], // ok
-      // RF
-      [90, 180, 90], // ok
-      // RD
-      [0, 0, -90], // ok
-      // RB
-      [90, 0, -90], // ok
+  @computed
+  List<int> get rotation => _axisAngles[axis.index];
 
-      // FU
-      [90, 90, 0], // ok
-      // FR
-      [0, 90, 0], // ok
-      // FD
-      [-90, 90, 0], // ok
-      // FL
-      [180, 90, 0], // ok
+  /// converts [CubeAxis] into rotation in degress ```[U, R, F]```
+  final _axisAngles = [
+    [0, 0, 0], //     UR
+    [-90, 0, 0], //   UF
+    [180, 0, 0], //   UL
+    [90, 0, 0], //    UB
 
-      // DR
-      [0, 180, 0], // ok
-      // DF
-      [90, 180, 0], // ok
-      // DL
-      [180, 180, 0], // ok
-      // DB
-      [-90, 180, 0], // ok
+    [0, 180, 90], //  RU
+    [90, 180, 90], // RF
+    [0, 0, -90], //   RD
+    [90, 0, -90], //  RB
 
-      // LU
-      [0, 0, 90], // ok
-      // LF
-      [-90, 0, 90], // ok
-      // LD
-      [180, 0, 90], // ok
-      // LB
-      [90, 0, 90], // ok
+    [90, 90, 0], //   FU
+    [0, 90, 0], //    FR
+    [-90, 90, 0], //  FD
+    [180, 90, 0], //  FL
 
-      // BU
-      [-90, -90, 0], // ok
-      // BR
-      [0, -90, 0], // ok
-      // BD
-      [90, -90, 0], // ok
-      // BL
-      [180, -90, 0] // ok
-    ];
+    [0, 180, 0], //   DR
+    [90, 180, 0], //  DF
+    [180, 180, 0], // DL
+    [-90, 180, 0], // DB
 
-    return axisAngles[axis.index];
-  }
+    [0, 0, 90], //    LU
+    [-90, 0, 90], //  LF
+    [180, 0, 90], //  LD
+    [90, 0, 90], //   LB
+
+    [-90, -90, 0], // BU
+    [0, -90, 0], //   BR
+    [90, -90, 0], //  BD
+    [180, -90, 0] //  BL
+  ];
 
   @computed
   List<CubeColor> get stickers {
-    var up = sequence.substring(CubeFacelet.U1.index, CubeFacelet.U9.index + 1);
-    var down =
-        sequence.substring(CubeFacelet.D1.index, CubeFacelet.D9.index + 1);
-    var left =
-        sequence.substring(CubeFacelet.L1.index, CubeFacelet.L9.index + 1);
-    var right =
-        sequence.substring(CubeFacelet.R1.index, CubeFacelet.R9.index + 1);
-    var front =
-        sequence.substring(CubeFacelet.F1.index, CubeFacelet.F9.index + 1);
-    var back =
-        sequence.substring(CubeFacelet.B1.index, CubeFacelet.B9.index + 1);
+    var up = state.substring(CubeFacelet.U1.index, CubeFacelet.U9.index + 1);
+    var down = state.substring(CubeFacelet.D1.index, CubeFacelet.D9.index + 1);
+    var left = state.substring(CubeFacelet.L1.index, CubeFacelet.L9.index + 1);
+    var right = state.substring(CubeFacelet.R1.index, CubeFacelet.R9.index + 1);
+    var front = state.substring(CubeFacelet.F1.index, CubeFacelet.F9.index + 1);
+    var back = state.substring(CubeFacelet.B1.index, CubeFacelet.B9.index + 1);
 
     var result = List<CubeColor>();
     result.addAll(_mapSticker(up));
@@ -132,28 +110,62 @@ abstract class _CubeState with Store {
   }
 
   @action
-  CubeCommand pop() {
-    if (moves.isNotEmpty) {
-      var last = moves.removeAt(0);
-      return last;
-    }
-    return null;
-  }
-
-  @action
-  push(CubeCommand move) {
+  void push(CubeCommand move) {
     moves.add(move);
   }
 
   @action
-  pushAll(Iterable<CubeCommand> sequence, {bool reversed = false}) {
+  void pushAll(Iterable<CubeCommand> sequence, {bool reversed = false}) {
     for (var cmd in sequence) {
       push(cmd);
     }
   }
 
+  @action
+  void clear() {
+    moves.clear();
+    current = -1;
+  }
+
+  @action
+  void rewind({int repeat = 1}) {
+    if (moves.isEmpty) {
+      current = -1;
+      return;
+    }
+
+    if (current >= moves.length) {
+      current = moves.length - 1;
+    }
+
+    for (int i = 0; i < repeat; i++) {
+      if (current >= 0) {
+        _apply(moves[current].reverse());
+      }
+    }
+  }
+
+  @action
+  forward({int repeat = 1}) {
+    if (moves.isEmpty) {
+      current = -1;
+      return;
+    }
+
+    if (current < 0) current = 0;
+
+    for (int i = 0; i < repeat; i++) {
+      if (current < moves.length) {
+        _apply(moves[current]);
+      }
+      current++;
+    }
+
+    if (current > moves.length) current = moves.length;
+  }
+
   @computed
-  String get debugCube => FaceCube.parse(sequence).to2dString();
+  String get debugCube => FaceCube.parse(state).to2dString();
 
   @action
   void reset() {
@@ -161,11 +173,11 @@ abstract class _CubeState with Store {
   }
 
   @action
-  void apply(String pattern, {bool reversed = false}) {
+  void apply(String pattern, {bool rewind = false}) {
     var moves = CubeCommand.parseAll(pattern);
 
-    for (var move in reversed ? moves.reversed : moves) {
-      _apply(move);
+    for (var move in rewind ? moves.reversed : moves) {
+      _apply(rewind ? move.reverse() : move);
     }
   }
 
@@ -174,9 +186,28 @@ abstract class _CubeState with Store {
     _apply(next);
   }
 
+  @action
+  void scramble() {
+    state = CubieCube.random().sequence;
+  }
+
+  @action
+  void invert() {
+    state = CubieCube.parse(state).inverse.sequence;
+  }
+
+  @action
+  CubeCommand pop() {
+    if (moves.isNotEmpty) {
+      var last = moves.removeAt(0);
+      return last;
+    }
+    return null;
+  }
+
   void _reset() {
-    sequence = FaceCube.solved.toString();
-    axis = CubeAxis.UR;
+    state = resetState;
+    axis = resetAxis;
   }
 
   void _applySlice(CubeCommand move) {
@@ -272,128 +303,22 @@ abstract class _CubeState with Store {
   void _rotateX(bool reversed, {bool doubled = false}) {
     var count = _moves(reversed, doubled);
     for (int i = 0; i < count; i++) {
-      axis = _rotateXAxis(axis);
+      axis = _rotateXAxis[axis.index];
     }
   }
 
   void _rotateY(bool reversed, {bool doubled = false}) {
     var count = _moves(reversed, doubled);
     for (int i = 0; i < count; i++) {
-      axis = _rotateYAxis(axis);
+      axis = _rotateYAxis[axis.index];
     }
   }
 
   void _rotateZ(bool reversed, {bool doubled = false}) {
     var count = _moves(reversed, doubled);
     for (int i = 0; i < count; i++) {
-      axis = _rotateZAxis(axis);
+      axis = _rotateZAxis[axis.index];
     }
-  }
-
-  CubeAxis _rotateZAxis(CubeAxis axis) {
-    var map = [
-      CubeAxis.LU, // UR ok
-      CubeAxis.LF, // UF OK
-      CubeAxis.LD, // UL ok
-      CubeAxis.LB, // UB OK
-
-      CubeAxis.UL, // RU ok
-      CubeAxis.UF, // RF ok
-      CubeAxis.UR, // RD ok
-      CubeAxis.UB, // RB ok
-
-      CubeAxis.FL, // FU ok
-      CubeAxis.FU, // FR ok
-      CubeAxis.FR, // FD ok
-      CubeAxis.FD, // FL ok
-
-      CubeAxis.RU, // DR ok
-      CubeAxis.RF, // DF ok
-      CubeAxis.RD, // DL ok
-      CubeAxis.RB, // DB ok
-
-      CubeAxis.DL, // LU ok
-      CubeAxis.DF, // LF ok
-      CubeAxis.DR, // LD ok
-      CubeAxis.DB, // LB ok
-
-      CubeAxis.BL, // BU ok
-      CubeAxis.BU, // BR ok
-      CubeAxis.BR, // BD ok
-      CubeAxis.BD, // BL ok
-    ];
-    return map[axis.index];
-  }
-
-  CubeAxis _rotateXAxis(CubeAxis axis) {
-    var map = [
-      CubeAxis.FR, // UR ok
-      CubeAxis.FD, // UF ok
-      CubeAxis.FL, // UL ok
-      CubeAxis.FU, // UB ok
-
-      CubeAxis.RF, // RU ok
-      CubeAxis.RD, // RF ok
-      CubeAxis.RB, // RD ok
-      CubeAxis.RU, // RB ok
-
-      CubeAxis.DF, // FU ok
-      CubeAxis.DR, // FR ok
-      CubeAxis.DB, // FD ok
-      CubeAxis.DL, // FL ok
-
-      CubeAxis.BR, // DR ok
-      CubeAxis.BD, // DF ok
-      CubeAxis.BL, // DL ok
-      CubeAxis.BU, // DB ok
-
-      CubeAxis.LF, // LU ok
-      CubeAxis.LD, // LF ok
-      CubeAxis.LB, // LD ok
-      CubeAxis.LU, // LB ok
-
-      CubeAxis.UF, // BU ok
-      CubeAxis.UR, // BR ok
-      CubeAxis.UB, // BD ok
-      CubeAxis.UL, // BL ok
-    ];
-    return map[axis.index];
-  }
-
-  CubeAxis _rotateYAxis(CubeAxis axis) {
-    var map = [
-      CubeAxis.UB, // UR ok
-      CubeAxis.UR, // UF ok
-      CubeAxis.UF, // UL ok
-      CubeAxis.UL, // UB ok
-
-      CubeAxis.BU, // RU OK
-      CubeAxis.BR, // RF OK
-      CubeAxis.BD, // RD OK
-      CubeAxis.BL, // RB OK
-
-      CubeAxis.RU, // FU OK
-      CubeAxis.RB, // FR OK
-      CubeAxis.RD, // FD OK
-      CubeAxis.RF, // FL OK
-
-      CubeAxis.DB, // DR ok
-      CubeAxis.DR, // DF ok
-      CubeAxis.DF, // DL ok
-      CubeAxis.DL, // DB ok
-
-      CubeAxis.FU, // LU OK
-      CubeAxis.FR, // LF OK
-      CubeAxis.FD, // LD OK
-      CubeAxis.FL, // LB OK
-
-      CubeAxis.LU, // BU OK
-      CubeAxis.LB, // BR OK
-      CubeAxis.LD, // BD OK
-      CubeAxis.LF, // BL OK
-    ];
-
-    return map[axis.index];
   }
 
   int _moves(bool reversed, bool doubled) {
@@ -406,7 +331,7 @@ abstract class _CubeState with Store {
 
   void _front(bool reversed, {bool wide = false, bool doubled = false}) {
     var count = _moves(reversed, doubled);
-    var cube = CubieCube.parse(sequence);
+    var cube = CubieCube.parse(state);
 
     if (wide) {
       cube.apply(CubeColor.B, count);
@@ -415,12 +340,12 @@ abstract class _CubeState with Store {
       cube.apply(CubeColor.F, count);
     }
 
-    sequence = cube.sequence;
+    state = cube.sequence;
   }
 
   void _back(bool reversed, {bool wide = false, bool doubled = false}) {
     var count = _moves(reversed, doubled);
-    var cube = CubieCube.parse(sequence);
+    var cube = CubieCube.parse(state);
 
     if (wide) {
       cube.apply(CubeColor.F, count);
@@ -429,12 +354,12 @@ abstract class _CubeState with Store {
       cube.apply(CubeColor.B, count);
     }
 
-    sequence = cube.sequence;
+    state = cube.sequence;
   }
 
   void _right(bool reversed, {bool wide = false, bool doubled = false}) {
     var count = _moves(reversed, doubled);
-    var cube = CubieCube.parse(sequence);
+    var cube = CubieCube.parse(state);
 
     if (wide) {
       cube.apply(CubeColor.L, count);
@@ -443,12 +368,12 @@ abstract class _CubeState with Store {
       cube.apply(CubeColor.R, count);
     }
 
-    sequence = cube.sequence;
+    state = cube.sequence;
   }
 
   void _left(bool reversed, {bool wide = false, bool doubled = false}) {
     var count = _moves(reversed, doubled);
-    var cube = CubieCube.parse(sequence);
+    var cube = CubieCube.parse(state);
 
     if (wide) {
       cube.apply(CubeColor.R, count);
@@ -457,12 +382,12 @@ abstract class _CubeState with Store {
       cube.apply(CubeColor.L, count);
     }
 
-    sequence = cube.sequence;
+    state = cube.sequence;
   }
 
   void _up(bool reversed, {bool wide = false, bool doubled = false}) {
     var count = _moves(reversed, doubled);
-    var cube = CubieCube.parse(sequence);
+    var cube = CubieCube.parse(state);
 
     if (wide) {
       cube.apply(CubeColor.D, count);
@@ -471,12 +396,12 @@ abstract class _CubeState with Store {
       cube.apply(CubeColor.U, count);
     }
 
-    sequence = cube.sequence;
+    state = cube.sequence;
   }
 
   void _down(bool reversed, {bool wide = false, bool doubled = false}) {
     var count = _moves(reversed, doubled);
-    var cube = CubieCube.parse(sequence);
+    var cube = CubieCube.parse(state);
 
     if (wide) {
       cube.apply(CubeColor.U, count);
@@ -485,36 +410,132 @@ abstract class _CubeState with Store {
       cube.apply(CubeColor.D, count);
     }
 
-    sequence = cube.sequence;
+    state = cube.sequence;
   }
 
   void _middle(bool reversed, {bool doubled = false}) {
-    var cube = CubieCube.parse(sequence);
+    var cube = CubieCube.parse(state);
 
     cube.apply(CubeColor.L, _moves(!reversed, doubled));
     cube.apply(CubeColor.R, _moves(reversed, doubled));
     _rotateX(!reversed, doubled: doubled);
 
-    sequence = cube.sequence;
+    state = cube.sequence;
   }
 
   void _standing(bool reversed, {bool doubled = false}) {
-    var cube = CubieCube.parse(sequence);
+    var cube = CubieCube.parse(state);
 
     cube.apply(CubeColor.F, _moves(!reversed, doubled));
     cube.apply(CubeColor.B, _moves(reversed, doubled));
     _rotateZ(reversed, doubled: doubled);
 
-    sequence = cube.sequence;
+    state = cube.sequence;
   }
 
   void _equitorial(bool reversed, {bool doubled = false}) {
-    var cube = CubieCube.parse(sequence);
+    var cube = CubieCube.parse(state);
 
     cube.apply(CubeColor.U, _moves(reversed, doubled));
     cube.apply(CubeColor.D, _moves(!reversed, doubled));
     _rotateY(!reversed, doubled: doubled);
 
-    sequence = cube.sequence;
+    state = cube.sequence;
   }
+
+  final _rotateXAxis = [
+    CubeAxis.FR, // UR
+    CubeAxis.FD, // UF
+    CubeAxis.FL, // UL
+    CubeAxis.FU, // UB
+
+    CubeAxis.RF, // RU
+    CubeAxis.RD, // RF
+    CubeAxis.RB, // RD
+    CubeAxis.RU, // RB
+
+    CubeAxis.DF, // FU
+    CubeAxis.DR, // FR
+    CubeAxis.DB, // FD
+    CubeAxis.DL, // FL
+
+    CubeAxis.BR, // DR
+    CubeAxis.BD, // DF
+    CubeAxis.BL, // DL
+    CubeAxis.BU, // DB
+
+    CubeAxis.LF, // LU
+    CubeAxis.LD, // LF
+    CubeAxis.LB, // LD
+    CubeAxis.LU, // LB
+
+    CubeAxis.UF, // BU
+    CubeAxis.UR, // BR
+    CubeAxis.UB, // BD
+    CubeAxis.UL, // BL
+  ];
+
+  final _rotateZAxis = [
+    CubeAxis.LU, // UR
+    CubeAxis.LF, // UF
+    CubeAxis.LD, // UL
+    CubeAxis.LB, // UB
+
+    CubeAxis.UL, // RU
+    CubeAxis.UF, // RF
+    CubeAxis.UR, // RD
+    CubeAxis.UB, // RB
+
+    CubeAxis.FL, // FU
+    CubeAxis.FU, // FR
+    CubeAxis.FR, // FD
+    CubeAxis.FD, // FL
+
+    CubeAxis.RU, // DR
+    CubeAxis.RF, // DF
+    CubeAxis.RD, // DL
+    CubeAxis.RB, // DB
+
+    CubeAxis.DL, // LU
+    CubeAxis.DF, // LF
+    CubeAxis.DR, // LD
+    CubeAxis.DB, // LB
+
+    CubeAxis.BL, // BU
+    CubeAxis.BU, // BR
+    CubeAxis.BR, // BD
+    CubeAxis.BD, // BL
+  ];
+
+  final _rotateYAxis = [
+    CubeAxis.UB, // UR
+    CubeAxis.UR, // UF
+    CubeAxis.UF, // UL
+    CubeAxis.UL, // UB
+
+    CubeAxis.BU, // RU
+    CubeAxis.BR, // RF
+    CubeAxis.BD, // RD
+    CubeAxis.BL, // RB
+
+    CubeAxis.RU, // FU
+    CubeAxis.RB, // FR
+    CubeAxis.RD, // FD
+    CubeAxis.RF, // FL
+
+    CubeAxis.DB, // DR
+    CubeAxis.DR, // DF
+    CubeAxis.DF, // DL
+    CubeAxis.DL, // DB
+
+    CubeAxis.FU, // LU
+    CubeAxis.FR, // LF
+    CubeAxis.FD, // LD
+    CubeAxis.FL, // LB
+
+    CubeAxis.LU, // BU
+    CubeAxis.LB, // BR
+    CubeAxis.LD, // BD
+    CubeAxis.LF, // BL
+  ];
 }

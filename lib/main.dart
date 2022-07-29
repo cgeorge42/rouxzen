@@ -64,7 +64,7 @@ class MyHomePage extends StatelessWidget {
           ),
           Padding(padding: EdgeInsets.only(left: 20)),
           FloatingActionButton(
-            onPressed: () => app.cube.pushAll(CubeCommand.random(4)),
+            onPressed: () => app.cube.scramble(),
             tooltip: 'Scramble',
             child: Icon(Icons.shuffle),
           )

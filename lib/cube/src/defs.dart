@@ -56,6 +56,9 @@ const edgeColor = [
   [CubeColor.B, CubeColor.R]
 ];
 
+const allEdges = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+const allCorners = [0, 1, 2, 3, 4, 5, 6, 7];
+
 const N_PERM_4 = 24;
 const N_CHOOSE_8_4 = 70;
 

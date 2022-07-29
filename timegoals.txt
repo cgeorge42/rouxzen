@@ -1,0 +1,258 @@
+Beginner Barriers - These will include times between 40-1:00+
+Complete Noob - 1:00+
+Overall Tips -
+You should be less concerned about getting faster and be more concerned with getting to know your cube and the Roux method
+
+Step 1 - First Block
+Don't be afraid to use the entire cube when doing this step. You don't have to keep certain pieces on the fixed position so go ahead and use slices! Here you want to use the least amount of moves to make the first 1x2x3 block. We use Slice Turn Metric or STM to count our moves so slices count as 1 move not 2. As a beginner aim for a higher number of moves like 15 as a start. Take as much time as needed to find a solution to the first 1x2x3 block with the least amount of moves.
+
+
+Step 2 - Second Block
+Okay! Now that you finished the first block, you have this restriction. Just do the same as Step 1...just don't break the first block. If you have to break the first block to work on the second, it's okay for now, just try find ways the NOT break the first block.
+
+
+Step 3 - Corners
+Believe it or not, you can get away using only 2 algorithms in this set. (actually 1 algorithm and a commutator) But it's best that you do what's called 2 look corners, where you orient and permute the corners separately. You can find these algorithms for orientation here and for permutation here For the permutation I suggest the T-perm and the Y-perm.
+
+Step 4 - Last Step Edges
+This is a repetitive process. All you have to do is look for misoriented edges and orient them by cycling around. And then solve the UL/UR pieces and finish the cube. For most, this step is difficult and will slow them down. But once you get the hang of this step, you'll be fast.
+Here are what you look for and what to do with them
+
+Complete Solve Tips
+Block building is something that needs to worked on the most in Roux method. I suggest NOT timing the entire solve but rather time each individual step. Once you get a break down of 20-20-10-20 then you should time yourself and see what you need to improve on from there.
+
+
+Average Noob - 45-50
+Overall Tips -
+Increase your turn speed just a little bit at a time. Too fast and you'll spend more time looking at the cube and less time actually solving.
+
+
+Step 1 - First Block
+Okay you average Noob, listen up. Here you will want to speed up just a little. And by little, I mean you're going faster but not fast that you lose sight of of your pieces. You should be able to use less than 15 STM when doing this step. Use all the time you need to plan out your first block solution and then execute them just a tad faster.
+
+Step 2 - Second Block
+Here, you will still try not to break the first block. Use wide (i.e. Rw or Rw') turns to help you find second block solutions that won't break the first block. Use as much time as needed to plan the solution and execute them just a little bit faster.
+
+Step 3 - Corners
+Learn 2 look Corners. And for now sub-10 seems like a good time to aim for corners as a noob. Practice recognition rather than speed for this step.
+
+
+Step 4 - Last Step Edges
+Be more productive with M' trigger. You pull from DB forward. Better finger tricks, better times. Still work on recognition as well so you can identify bad edges rather quickly.
+
+Complete Solve Tips
+Well again blocks take up the most time in solves so work on those. Aim for 10-15-10-15.
+
+
+Better Noob - 40
+Overall Tips -
+Increase you Turn speed even more! But still work on recognition.
+
+Step 1 - First Block
+Alright, since first blocks is becoming more like a habit rather than a chore, aim for an even lower first block move count. 13 seems like a good number for a better noob like you. Again, take the time to plan out your solution and execute. Increase your turn speed just a little bit every time.
+
+Step 2 - Second Block
+Breaking the first block will no longer me acceptable at this time barrier. I know it might seem longer that you can't break the first block but you can still find solutions less than 16 STM. Again, take the time to plan out your solution and execute. Increase your turn speed just a little bit every time.
+
+Step 3 - Corners
+Just keep drilling yourself with 2 look corners
+
+Step 4 - Last Step Edges
+Work on recognition still. You want to be able do know what do next after the each sub-step. At this barrier,I'd like you to slow down with this step and practice like you will with the blocks by taking the time to plan the solution.
+
+Complete Solve Tips
+Lower move count is better. As a better noob aim for 13 STM for the blocks. Times to aim for at this step will be 8-10-8-14
+
+
+Intermediate Barriers - These will include times between 30-40
+"Look I can do this too!" - sub-40
+Overall Tips -
+By this barrier you should able see the blocks easily with less moves. Now you work on turn speed. By now I'll assume that you know how to drill yourself with blocks and corners. And that you have to drill yourself no matter which barrier you're in.
+
+Step 1 - First Block
+Let's aim for an even lower move count number. Let's aim for 12. Please note that this is only 1 less move than before. This is meant to play some mind-tricks. This only gradually goes down so you can manage a low move count. And even better, you get work on getting faster. (YAY) Increase your turn speed even more!
+
+Step 2 - Second Block
+Okay,I'd like to see NO cube rotations from now on. Find solutions where you don't have to rotate insert pieces.
+
+Step 3 - Corners
+Just keep drilling 2 look corners and IMPROVE RECOGNITION!
+
+Step 4 - Last Step Edges
+I'd like you to practice ONLY edge orientation(EO)for a while. Try getting sub-3 on EO alone. Everything else for this step can wait a while longer.
+
+Complete Solve Tips
+Continue to drill your self with blocks and corners with the new move count. For the EO, sub-3 practice EO like you would with blocks. 8-10-7-14
+
+
+
+"I'm getting soooooo much better" - 35
+Overall Tips -
+Use less moves and faster turning. You should be able to see the EO case instantly.
+
+Step 1 - First Block
+Let's go down another move to a 11 move limit. But this time, I'd like you to practice 2 ways.
+1) The usually take as much as possible to find the best solution.
+2) use only 20-30 seconds to find a solution and then do them quickly
+
+Step 2 - Second Block
+Do the same as Step 1 but without the move count limit. Limit you moves to <R,Rw, U, M>
+
+
+Step 3 - Corners
+Keep on 2 look corners aim for sub-4
+
+Step 4 - Last Step Edges
+This time I'd like to see more practice on UL/UR Permutation. You should be able to the piece right after the EO and can make a smooth transition between sub-steps.
+
+Complete Solve Tips
+When doing solves, try to go smooth without having to do long pauses. Aim for 8-10-4-13
+
+
+
+"Almost there" - 30
+Overall Tips -
+Try some solves where you as smooth as possible with no pauses no matter how slow you get. This will help you in look ahead.
+
+Step 1 - First Block
+We'll stick to the current 11 move count limit. But practice like before
+1) The usually take as much as possible to find the best solution.
+2) use only 10-20 seconds to find a solution and then do them quickly
+
+BUT THIS TIME!
+
+3) Aim for a time. 7 seconds sound okay right now
+
+Step 2 - Second Block
+Do the same as Step 1 but without the time/move count limit and
+
+Step 3 - Corners
+I'd like you to find a nice CMLL set and store them away for a while. Practice 2 look corners!
+
+Step 4 - Last Step Edges
+Practice going slowly, but smoothly with all of step-4 To improve look ahead.
+
+Complete Solve Tips
+Slow down a little bit in step 4 to get better in look ahead and smoothness.
+Aim for 8-8-4-10
+
+
+
+"Not yet expert but sure as hell ain't intermediate" Barriers - These will include times between 30-21
+Frequent Barrier Breaker - Sub-30
+Overall Tips -
+Okay, big decision right here. From now own there will 2 paths to sub-20.
+
+a)Learn CMLL to get sub-20
+Pros - You'll know CMLL and see big jumps in time.
+Cons - You'll spend Less Time On Blocks and your times will plateau for a long time
+
+b)no CMLL until Sub-20
+Pros - You'll get better in blocks, CMLL can wait
+Cons - You won't see the immediate jump in times, but rather gradual
+
+Step 1 - First Block
+Smoothness counts, increase the Turn Speed but retain short pauses.
+a)Limit the move count to 11 and increase speed
+b)limit the move count to 10 and increase recognition and speed
+
+Step 2 - Second Block
+a)Focus less on this step and more on the first block. When you get a good start, you can use more moves that are faster
+b)Limit the move count but increase the speed and recognize easy cases when you get them.
+
+Step 3 - Corners
+a)Practice all CMLL. Aim for sub-4 (this includes recognition)
+b)focus on blocks. Blocks will allow you make up in this step with two look corners.
+
+Step 4 - Last Step Edges
+Work on M-triggers. Increase the move speed. By this time I expect that you can recognize the EO case and smoothly execute the UL/UR pieces.
+
+Complete Solve Tips
+a) Focus on CMLL a lot! and Improve the LSE. Aim for 6-8-4-10
+b) Get your block move count and times real low. Aim for 5-7-6-10
+
+
+Middle of the Line - 25
+Overall Tips -
+a)Since CMLL will only make your times jump a little bit, remember to work on blocks if you want to equalize with the (b) method to get sub-20
+b)Keep at the block building. You'll reach the final level for first block move count and get the second block move count limit.
+
+Step 1 - First Block
+a)Limit the move count to 11 and increase speed and limit pauses. You'll need to get faster with this step rather than fewer moves if you expect to get sub-20.
+b)limit the move count to 9 and increase recognition and speed. This is the lowest that this number will go. It is encouraged that you continue to find lower move counts than this.
+
+Step 2 - Second Block
+a)Apply some more speed here. It is important that you get fast with blocks even if the move count is bad.
+b)Limit the move count for this step to be 12 STM. Practice as you would.
+
+Step 3 - Corners
+a) Aim for the sub-3 CMLL
+b)Just keep at 2 look corners
+
+Step 4 - Last Step Edges
+Increase the SPEED even more!!!!
+
+Complete Solve Tips
+a)Speed is key for this. No matter how bad your blocks are in move count. You have to make it up in speed. Aim for 5-8-3-8
+b)With the second block having a limit you have to work on that yo find about quick solution with them. Aim for 5-6-5-8
+
+Getting The Big Guns Ready - 21
+Overall Tips -
+a)Now that CMLL is around 3 seconds. You get to focus on blocks.
+b)Look for those CMLL algorithms. When you get to sub-20 you'll do nothing but learn the CMLL
+
+Step 1 - First Block
+a)Limit the move count to 10. Go fast and go smooth!
+b) And now that you're at the 9 move count limit. You can't do much but speed it up.
+
+Step 2 - Second Block
+a) I won't put the move count limit, but try to sub-7 this block
+b)Go fast with no pauses.
+
+Step 3 - Corners
+a) Sub-2 is what you're aiming for
+b) Gradually learn these algorithms.
+
+Step 4 - Last Step Edges
+Work on the 4b to 4c transition if you feel like it's a little choppy in solving.
+
+Complete Solve Tips
+for people following
+(a) aim for 5-7-2-7
+(b) aim for 4-6-4-7
+
+Expert Barriers - These will include times between 20-beyond
+
+NOTE! - By these barriers (a) should be complete with CMLL and (b) should learn CMLL before becoming a Trigger Happy Cuber
+
+Welcome To The Sub-20 Club - 20
+Overall Tips -
+Like the beginner, work on blocks and LSE
+
+Step 1 - First Block
+Move count limit of 10 but a time limit of 5 seconds. Obviously increase turn speed. But work on smooth turning and transition to the next step
+
+Step 2 - Second Block
+Go low with the move count but a time limit 6. Anticipate what to do in this step before doing this step. Very Happy
+
+Step 3 - Corners
+Not very not a lot of tips. Just practice this.
+
+Step 4 - Last Step Edges
+Make sure the sub-step transition is smooth and fast.
+
+Complete Solve Tips
+The only thing stopping you know are pauses and limit in look ahead. Work on this.
+
+
+Trigger Happy Cuber - 18
+Overall Tips -
+Smoothness and speed count. By now you should have adapted your own style of Roux. And you shouldn't really need any more tips about solving. You know where you're weak at, so go help yourself and practice those steps. Aim for 4-5-3-6
+
+REBEL! - 16
+Aim for 3-5-3-4
+
+Roux is capable of sub-15 and beyond
+Don't LET THOSE DAMN CFOP Users tell you otherwise.
+
+~Waffle

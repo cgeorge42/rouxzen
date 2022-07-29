@@ -4,8 +4,10 @@ import 'cubie.dart' show CubieCube;
 
 /// Represent a cube on the facelet level with 54 colored facelets.
 class FaceCube {
+  static const solved =
+      "UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB";
+
   final List<int> f = [];
-  static final solved = FaceCube();
 
   bool isValid = true;
 

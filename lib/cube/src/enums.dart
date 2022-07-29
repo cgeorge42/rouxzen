@@ -176,13 +176,3 @@ enum CubeAxis {
   BD,
   BL
 }
-
-/// A rotation of the cube axis in face turn metrics
-/// ``` text
-/// Y - rotate the cube on U
-/// X - rotate the cube on R
-/// Z - rotate the cube on F
-///
-/// Y1, Y2, Y3, X1, X2, X3, Z1, Z2, Z3
-/// ```
-enum CubeRotation { Y1, Y2, Y3, X1, X2, X3, Z1, Z2, Z3 }

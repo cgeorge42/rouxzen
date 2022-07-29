@@ -135,6 +135,11 @@ class _CubePanelState extends State<CubePanel>
         if (evt.isShiftPressed) key += "'";
       }
 
+      if (key == "-") {
+        widget.cube.invert();
+        return;
+      }
+
       widget.cube.push(CubeCommand.parse(key));
     }
   }
